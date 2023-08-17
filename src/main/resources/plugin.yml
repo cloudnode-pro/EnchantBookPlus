@@ -1,0 +1,5 @@
+name: EnchantBookPlus
+version: '${project.version}'
+main: pro.cloudnode.smp.enchantbookplus.EnchantBookPlus
+description: "Combine enchantment books to achieve levels above vanilla"
+api-version: '1.20'

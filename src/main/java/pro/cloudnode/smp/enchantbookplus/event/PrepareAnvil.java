@@ -37,7 +37,7 @@ public final class PrepareAnvil implements Listener {
         for (final @NotNull Map.Entry<@NotNull Enchantment, @NotNull Integer> entry : upgradeEnchants.entrySet()) {
             final @NotNull Enchantment enchantment = entry.getKey();
             if (enchantment.getMaxLevel() == 1) continue;
-            final @NotNull Optional<@NotNull ConfigEnchantmentEntry> configEnchantment = EnchantBookPlus.getInstance().getConfigEnchantment(enchantment.getKey().getKey());
+            final @NotNull Optional<@NotNull ConfigEnchantmentEntry> configEnchantment = EnchantBookPlus.getInstance().getConfigEnchantment(enchantment);
             if (configEnchantment.isEmpty()) continue;
             final int upgradeLevel = entry.getValue();
             final int finalLevel;

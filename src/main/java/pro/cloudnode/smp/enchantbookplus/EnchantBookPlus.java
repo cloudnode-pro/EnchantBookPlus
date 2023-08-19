@@ -1,5 +1,6 @@
 package pro.cloudnode.smp.enchantbookplus;
 
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import pro.cloudnode.smp.enchantbookplus.event.PrepareAnvil;
@@ -40,10 +41,10 @@ public final class EnchantBookPlus extends JavaPlugin {
     /**
      * Get enchantment from cache
      *
-     * @param name Name of the enchantment
+     * @param enchantment The Minecraft enchantment
      */
-    public @NotNull Optional<@NotNull ConfigEnchantmentEntry> getConfigEnchantment(final @NotNull String name) {
-        return getConfigEnchantments().stream().filter(enchantment -> enchantment.getName().equalsIgnoreCase(name) || enchantment.getName().equalsIgnoreCase("ALL")).findFirst();
+    public @NotNull Optional<@NotNull ConfigEnchantmentEntry> getConfigEnchantment(final @NotNull Enchantment enchantment) {
+        return getConfigEnchantments().stream().filter(c -> c.isEnchantment(enchantment)).findFirst();
     }
 
     /**

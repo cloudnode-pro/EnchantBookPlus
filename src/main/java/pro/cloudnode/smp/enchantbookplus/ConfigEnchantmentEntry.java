@@ -1,5 +1,6 @@
 package pro.cloudnode.smp.enchantbookplus;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -46,11 +47,10 @@ public final class ConfigEnchantmentEntry {
 
     /**
      * Maximum level of the enchantment.
-     * @param enchantment The enchantment
      */
-    public @NotNull Optional<Integer> getMaxLevel(final @NotNull Enchantment enchantment) {
+    public @NotNull Optional<Integer> getMaxLevel() {
         if (Optional.ofNullable(maxLevel).isEmpty()) return Optional.empty();
-        if (maxLevelRelative) return Optional.of(enchantment.getMaxLevel() + maxLevel);
+        if (maxLevelRelative) return Optional.of(getEnchantment().getMaxLevel() + maxLevel);
         return Optional.of(maxLevel);
     }
 
@@ -69,10 +69,26 @@ public final class ConfigEnchantmentEntry {
     }
 
     /**
-     * @param name Name of the enchantment.
-     * @param maxLevel Maximum level of the enchantment.
-     * @param maxLevelRelative Max level relative
-     * @param cost Cost of the enchantment.
+     * Get enchantment
+     */
+    public Enchantment getEnchantment() {
+        return Enchantment.getByKey(NamespacedKey.minecraft(name));
+    }
+
+    /**
+     * Is enchantment
+     *
+     * @param enchantment The enchantment
+     */
+    public boolean isEnchantment(final @NotNull Enchantment enchantment) {
+        return name.equalsIgnoreCase(enchantment.getKey().getKey());
+    }
+
+    /**
+     * @param name                Name of the enchantment.
+     * @param maxLevel            Maximum level of the enchantment.
+     * @param maxLevelRelative    Max level relative
+     * @param cost                Cost of the enchantment.
      * @param multiplyCostByLevel Multiply cost by level.
      */
     public ConfigEnchantmentEntry(final @NotNull String name, final @Nullable Integer maxLevel, final boolean maxLevelRelative, final int cost, final boolean multiplyCostByLevel) {
@@ -159,8 +175,10 @@ public final class ConfigEnchantmentEntry {
             if (!(object instanceof final @NotNull HashMap<?, ?> hashMap)) return false;
             if (!hashMap.containsKey("name")) return false;
             if (!(hashMap.get("name") instanceof String)) return false;
-            if (hashMap.containsKey("max-level") && !(hashMap.get("max-level") instanceof String) && !(hashMap.get("max-level") instanceof Integer)) return false;
-            if (hashMap.containsKey("cost") && !(hashMap.get("cost") instanceof String) && !(hashMap.get("cost") instanceof Integer)) return false;
+            if (hashMap.containsKey("max-level") && !(hashMap.get("max-level") instanceof String) && !(hashMap.get("max-level") instanceof Integer))
+                return false;
+            if (hashMap.containsKey("cost") && !(hashMap.get("cost") instanceof String) && !(hashMap.get("cost") instanceof Integer))
+                return false;
         }
         return true;
     }

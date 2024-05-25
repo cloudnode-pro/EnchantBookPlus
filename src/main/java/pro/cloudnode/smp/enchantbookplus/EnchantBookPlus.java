@@ -7,6 +7,7 @@ import pro.cloudnode.smp.enchantbookplus.event.PrepareAnvil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Level;
 
@@ -63,6 +64,8 @@ public final class EnchantBookPlus extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        Objects.requireNonNull(getCommand("enchantbookplus")).setExecutor(new MainCommand());
+
         registerEvents();
         saveDefaultConfig();
         reload();

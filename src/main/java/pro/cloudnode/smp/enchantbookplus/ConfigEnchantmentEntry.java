@@ -48,7 +48,7 @@ public final class ConfigEnchantmentEntry {
     /**
      * Maximum level of the enchantment.
      */
-    public @NotNull Optional<Integer> getMaxLevel() {
+    public @NotNull Optional<@NotNull Integer> getMaxLevel() {
         if (Optional.ofNullable(maxLevel).isEmpty()) return Optional.empty();
         if (maxLevelRelative) return Optional.of(getEnchantment().getMaxLevel() + maxLevel);
         return Optional.of(maxLevel);
@@ -104,7 +104,7 @@ public final class ConfigEnchantmentEntry {
      *
      * @param configValue Config object
      */
-    public static ConfigEnchantmentEntry configValue(final @NotNull HashMap<@NotNull String, @NotNull Object> configValue) {
+    public static @NotNull ConfigEnchantmentEntry configValue(final @NotNull HashMap<@NotNull String, @NotNull Object> configValue) {
         final @NotNull String name = (String) Objects.requireNonNull(configValue.get("name"));
         final @Nullable Integer maxLevel;
         final boolean maxLevelRelative;

@@ -13,6 +13,9 @@ This plugin allows you to combine enchantments, e.g. Efficiency V + Efficiency V
 
 You can configure which enchantments can be combined above the Vanilla Minecraft levels. You can set the max level for each enchantment, and add XP cost in levels.
 
+> [!IMPORTANT]
+> This plugin requires [AnvilUnlocker](https://github.com/Jikoo/AnvilUnlocker/releases/latest) for anvil costs above 40 lvl.
+
 ## Permissions
 
 > [!NOTE]

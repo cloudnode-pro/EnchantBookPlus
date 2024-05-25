@@ -3,6 +3,7 @@ package pro.cloudnode.smp.enchantbookplus;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import pro.cloudnode.smp.enchantbookplus.event.PrepareAnvil;
 
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 public final class EnchantBookPlus extends JavaPlugin {
     /**
@@ -39,13 +41,26 @@ public final class EnchantBookPlus extends JavaPlugin {
     }
 
     /**
+     * "ALL" enchantment cache
+     */
+    private @Nullable ConfigEnchantmentEntry.AllConfigEnchantmentEntry allConfigEnchantment;
+
+    /**
+     * "ALL" enchantment cache
+     */
+    public @NotNull Optional<ConfigEnchantmentEntry.@NotNull AllConfigEnchantmentEntry> getAllConfigEnchantment() {
+        return Optional.ofNullable(allConfigEnchantment);
+    }
+
+    /**
      * Get enchantment from cache
      *
      * @param enchantment The Minecraft enchantment
      */
     public @NotNull Optional<@NotNull ConfigEnchantmentEntry> getConfigEnchantment(final @NotNull Enchantment enchantment) {
         final @NotNull Optional<@NotNull ConfigEnchantmentEntry> entry = getConfigEnchantments().stream().filter(c -> c.isEnchantment(enchantment)).findFirst();
-        return entry.isEmpty() ? getConfigEnchantments().stream().filter(c -> c.getName().equalsIgnoreCase("ALL")).findFirst() : entry;
+        getLogger().info(configEnchantments.stream().map(c -> c.name).collect(Collectors.joining(", ")));
+        return entry.isEmpty() ? getAllConfigEnchantment().map(a -> a.enchant(enchantment)) : entry;
     }
 
     /**
@@ -53,13 +68,18 @@ public final class EnchantBookPlus extends JavaPlugin {
      */
     public void reload() {
         reloadConfig();
+        final @NotNull List<@NotNull ConfigEnchantmentEntry> enchants;
         try {
-            configEnchantments = ConfigEnchantmentEntry.config(getConfig().get("enchantments"));
+            enchants = ConfigEnchantmentEntry.config(getConfig().get("enchantments"));
         }
         catch (final @NotNull Exception exception) {
             getLogger().log(Level.SEVERE, "Failed to load config", exception);
             getServer().getPluginManager().disablePlugin(this);
+            return;
         }
+        allConfigEnchantment = enchants.stream()
+                .filter(c -> c.name.equalsIgnoreCase("ALL")).findFirst().map(ConfigEnchantmentEntry.AllConfigEnchantmentEntry::from).orElse(null);
+        configEnchantments = enchants.stream().filter(c -> !c.name.equalsIgnoreCase("ALL")).collect(Collectors.toList());
     }
 
     @Override

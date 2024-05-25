@@ -11,6 +11,7 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.jetbrains.annotations.NotNull;
 import pro.cloudnode.smp.enchantbookplus.ConfigEnchantmentEntry;
 import pro.cloudnode.smp.enchantbookplus.EnchantBookPlus;
+import pro.cloudnode.smp.enchantbookplus.Permissions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +37,7 @@ public final class PrepareAnvil implements Listener {
         int cost = 0;
         for (final @NotNull Map.Entry<@NotNull Enchantment, @NotNull Integer> entry : upgradeEnchants.entrySet()) {
             final @NotNull Enchantment enchantment = entry.getKey();
+            if (!event.getView().getPlayer().hasPermission(Permissions.enchant(enchantment))) continue;
             if (enchantment.getMaxLevel() == 1) continue;
             final @NotNull Optional<@NotNull ConfigEnchantmentEntry> configEnchantment = EnchantBookPlus.getInstance().getConfigEnchantment(enchantment);
             if (configEnchantment.isEmpty()) continue;

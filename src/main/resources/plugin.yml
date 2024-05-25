@@ -1,5 +1,12 @@
 name: EnchantBookPlus
 version: '${project.version}'
+author: Cloudnode
 main: pro.cloudnode.smp.enchantbookplus.EnchantBookPlus
 description: "Combine enchantment books to achieve levels above vanilla"
 api-version: '1.20'
+softdepend:
+  - AnvilUnlocker
+commands:
+  enchantbookplus:
+    description: "EnchantBookPlus main command"
+    usage: "/<command>"

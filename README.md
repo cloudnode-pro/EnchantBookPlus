@@ -13,6 +13,18 @@ This plugin allows you to combine enchantments, e.g. Efficiency V + Efficiency V
 
 You can configure which enchantments can be combined above the Vanilla Minecraft levels. You can set the max level for each enchantment, and add XP cost in levels.
 
+# Permissions
+
+> [!NOTE]
+> `<echantment>` is the enchantment ID, e.g. `swift_sneak`, `efficiency`, etc. Replace with `*` for all enchantments.
+>
+> Example: `enchantbookplus.enchant.*` or `enchantbookplus.enchant.unbreaking`
+
+| Permission                              | Description                                                                            |
+|-----------------------------------------|----------------------------------------------------------------------------------------|
+| `enchantbookplus.enchant.<enchantment>` | Allow enchanting `<enchantment>` above the vanilla level, as configured in the plugin. |
+| `enchantbookplus.reload`                | Reload plugin config using `/enchantbookplus reload`                                   |
+
 ## Reporting issues
 Fixing bugs is the utmost priority for this project. If you find any issue, check the [GitHub Issue Tracker](https://github.com/cloudnode-pro/EnchantBookPlus/issues) to see if it has already been reported. If not, create a new issue.
 

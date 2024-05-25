@@ -35,7 +35,6 @@ public final class EnchantBookPlus extends JavaPlugin {
      * Config enchantments cache
      */
     public @NotNull List<@NotNull ConfigEnchantmentEntry> getConfigEnchantments() {
-        if (configEnchantments.size() == 0) reload();
         return configEnchantments;
     }
 
@@ -45,7 +44,8 @@ public final class EnchantBookPlus extends JavaPlugin {
      * @param enchantment The Minecraft enchantment
      */
     public @NotNull Optional<@NotNull ConfigEnchantmentEntry> getConfigEnchantment(final @NotNull Enchantment enchantment) {
-        return getConfigEnchantments().stream().filter(c -> c.isEnchantment(enchantment)).findFirst();
+        final @NotNull Optional<@NotNull ConfigEnchantmentEntry> entry = getConfigEnchantments().stream().filter(c -> c.isEnchantment(enchantment)).findFirst();
+        return entry.isEmpty() ? getConfigEnchantments().stream().filter(c -> c.getName().equalsIgnoreCase("ALL")).findFirst() : entry;
     }
 
     /**

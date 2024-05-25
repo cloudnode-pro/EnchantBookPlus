@@ -13,7 +13,7 @@ This plugin allows you to combine enchantments, e.g. Efficiency V + Efficiency V
 
 You can configure which enchantments can be combined above the Vanilla Minecraft levels. You can set the max level for each enchantment, and add XP cost in levels.
 
-# Permissions
+## Permissions
 
 > [!NOTE]
 > `<echantment>` is the enchantment ID, e.g. `swift_sneak`, `efficiency`, etc. Replace with `*` for all enchantments.

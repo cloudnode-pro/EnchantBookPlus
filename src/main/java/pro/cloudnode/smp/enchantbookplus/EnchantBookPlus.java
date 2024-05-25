@@ -59,7 +59,6 @@ public final class EnchantBookPlus extends JavaPlugin {
      */
     public @NotNull Optional<@NotNull ConfigEnchantmentEntry> getConfigEnchantment(final @NotNull Enchantment enchantment) {
         final @NotNull Optional<@NotNull ConfigEnchantmentEntry> entry = getConfigEnchantments().stream().filter(c -> c.isEnchantment(enchantment)).findFirst();
-        getLogger().info(configEnchantments.stream().map(c -> c.name).collect(Collectors.joining(", ")));
         return entry.isEmpty() ? getAllConfigEnchantment().map(a -> a.enchant(enchantment)) : entry;
     }
 

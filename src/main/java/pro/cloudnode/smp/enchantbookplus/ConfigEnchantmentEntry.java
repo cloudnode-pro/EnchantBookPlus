@@ -12,43 +12,43 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public final class ConfigEnchantmentEntry {
+public class ConfigEnchantmentEntry {
     /**
      * Name of the enchantment.
      */
-    private final @NotNull String name;
+    public final @NotNull String name;
 
     /**
      * Maximum level of the enchantment.
      */
-    private final @Nullable Integer maxLevel;
+    protected final @Nullable Integer maxLevel;
 
     /**
      * Max level relative
      */
-    private final boolean maxLevelRelative;
+    protected final boolean maxLevelRelative;
 
     /**
      * Cost of the enchantment.
      */
-    private final int cost;
+    protected final int cost;
 
     /**
      * Multiply cost by level.
      */
-    private final boolean multiplyCostByLevel;
+    protected final boolean multiplyCostByLevel;
 
     /**
      * Name of the enchantment.
      */
-    public @NotNull String getName() {
+    public final @NotNull String getName() {
         return name;
     }
 
     /**
      * Maximum level of the enchantment.
      */
-    public @NotNull Optional<Integer> getMaxLevel() {
+    public final @NotNull Optional<@NotNull Integer> getMaxLevel() {
         if (Optional.ofNullable(maxLevel).isEmpty()) return Optional.empty();
         if (maxLevelRelative) return Optional.of(getEnchantment().getMaxLevel() + maxLevel);
         return Optional.of(maxLevel);
@@ -57,21 +57,21 @@ public final class ConfigEnchantmentEntry {
     /**
      * Cost of the enchantment.
      */
-    public int getCost() {
+    public final int getCost() {
         return cost;
     }
 
     /**
      * Multiply cost by level.
      */
-    public boolean getMultiplyCostByLevel() {
+    public final boolean getMultiplyCostByLevel() {
         return multiplyCostByLevel;
     }
 
     /**
      * Get enchantment
      */
-    public Enchantment getEnchantment() {
+    public final Enchantment getEnchantment() {
         return Enchantment.getByKey(NamespacedKey.minecraft(name));
     }
 
@@ -80,7 +80,7 @@ public final class ConfigEnchantmentEntry {
      *
      * @param enchantment The enchantment
      */
-    public boolean isEnchantment(final @NotNull Enchantment enchantment) {
+    public final boolean isEnchantment(final @NotNull Enchantment enchantment) {
         return name.equalsIgnoreCase(enchantment.getKey().getKey());
     }
 
@@ -104,7 +104,7 @@ public final class ConfigEnchantmentEntry {
      *
      * @param configValue Config object
      */
-    public static ConfigEnchantmentEntry configValue(final @NotNull HashMap<@NotNull String, @NotNull Object> configValue) {
+    public static @NotNull ConfigEnchantmentEntry configValue(final @NotNull HashMap<@NotNull String, @NotNull Object> configValue) {
         final @NotNull String name = (String) Objects.requireNonNull(configValue.get("name"));
         final @Nullable Integer maxLevel;
         final boolean maxLevelRelative;
@@ -191,5 +191,19 @@ public final class ConfigEnchantmentEntry {
     public static @NotNull List<@NotNull ConfigEnchantmentEntry> config(final @Nullable Object configValue) throws IllegalArgumentException {
         if (!isValidConfigValue(configValue)) throw new IllegalArgumentException("Invalid config value");
         return configArray((ArrayList<HashMap<String, Object>>) configValue);
+    }
+
+    public static final class AllConfigEnchantmentEntry extends ConfigEnchantmentEntry {
+        private AllConfigEnchantmentEntry(final @Nullable Integer maxLevel, final boolean maxLevelRelative, final int cost, final boolean multiplyCostByLevel) {
+            super("ALL", maxLevel, maxLevelRelative, cost, multiplyCostByLevel);
+        }
+
+        public static @NotNull AllConfigEnchantmentEntry from(final @NotNull ConfigEnchantmentEntry configEnchantmentEntry) {
+            return new AllConfigEnchantmentEntry(configEnchantmentEntry.maxLevel, configEnchantmentEntry.maxLevelRelative, configEnchantmentEntry.cost, configEnchantmentEntry.multiplyCostByLevel);
+        }
+
+        public @NotNull ConfigEnchantmentEntry enchant(final @NotNull Enchantment enchantment) {
+            return new ConfigEnchantmentEntry(enchantment.getKey().getKey(), this.maxLevel, maxLevelRelative, cost, multiplyCostByLevel);
+        }
     }
 }

@@ -9,12 +9,15 @@
 Combine enchantment books to achieve levels above vanilla
 
 ## How it works
-This plugin allows you to combine enchantments, e.g. Efficiency V + Efficiency V = Efficiency VI. This is done by using an anvil.
+This plugin allows you to combine enchantments, e.g. Efficiency V + Efficiency V = Efficiency VI.
+This is done by using an anvil.
 
-You can configure which enchantments can be combined above the Vanilla Minecraft levels. You can set the max level for each enchantment, and add XP cost in levels.
+You can configure which enchantments can be combined above the Vanilla Minecraft levels.
+You can set the max level for each enchantment, and add XP cost in levels.
 
 > [!IMPORTANT]
-> This plugin requires [AnvilUnlocker](https://github.com/Jikoo/AnvilUnlocker/releases/latest) for anvil costs above 40 lvl.
+> You need [AnvilUnlocker](https://github.com/Jikoo/AnvilUnlocker/releases/latest) for anvil costs above 40 lvl to
+> disable the "Too Expensive!" message.
 
 ## Permissions
 
@@ -29,7 +32,10 @@ You can configure which enchantments can be combined above the Vanilla Minecraft
 | `enchantbookplus.reload`                | Reload plugin config using `/enchantbookplus reload`                                   |
 
 ## Reporting issues
-Fixing bugs is the utmost priority for this project. If you find any issue, check the [GitHub Issue Tracker](https://github.com/cloudnode-pro/EnchantBookPlus/issues) to see if it has already been reported. If not, create a new issue.
+Fixing bugs is the utmost priority for this project.
+If you find any issue,
+check the [GitHub Issue Tracker](https://github.com/cloudnode-pro/EnchantBookPlus/issues)
+to see if it has already been reported. If not, create a new issue.
 
 When creating a new issue, include as many relevant details as possible, e.g.:
 
@@ -52,4 +58,5 @@ Pull requests require approval and changes may be requested before merging to th
 Contributions of any kind are most welcome and are given full credit.
 
 ### License
-This is libre software, meaning that it is forever free and open source, licensed under the GNU General Public License version 3. You can read the [full license](https://github.com/cloudnode-pro/EnchantBookPlus/blob/main/LICENSE). 
+This is libre software, meaning that it is forever free and open source, licensed under the GNU General Public License
+version 3. You can read the [full license](https://github.com/cloudnode-pro/EnchantBookPlus/blob/main/LICENSE). 

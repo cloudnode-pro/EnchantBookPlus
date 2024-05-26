@@ -19,8 +19,14 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Set release version
+        run: |
+          TAG=${{ github.event.release.tag_name }}
+          echo "VERSION=${TAG#v}" >> $GITHUB_OUTPUT
+        id: version
+
       - name: Set project version
-        run: mvn -B versions:set -DnewVersion=${{ github.event.release.tag_name }} -DgenerateBackupPoms=false
+        run: mvn -B versions:set -DnewVersion=${{ steps.version.outputs.VERSION }} -DgenerateBackupPoms=false
 
       - name: Build and package Maven project
         run: mvn clean package
@@ -28,7 +34,7 @@ jobs:
       - name: Upload to release
         uses: JasonEtco/upload-to-release@master
         with:
-          args: target/EnchantBookPlus-${{ github.event.release.tag_name }}.jar application/java-archive
+          args: target/EnchantBookPlus-${{ steps.version.outputs.VERSION }}.jar application/java-archive
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -37,6 +43,6 @@ jobs:
         with:
           token: '${{ secrets.MODRINTH_TOKEN }}'
           project: '${{ github.event.repository.custom_properties.modrinth_id }}'
-          file: target/EnchantBookPlus-${{ github.event.release.tag_name }}.jar
+          file: target/EnchantBookPlus-${{ steps.version.outputs.VERSION }}.jar
           changelog: ${{ github.event.release.body }}
           loaders: paper

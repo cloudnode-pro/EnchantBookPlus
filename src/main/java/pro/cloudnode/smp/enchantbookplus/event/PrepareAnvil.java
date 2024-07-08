@@ -9,13 +9,13 @@ import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import pro.cloudnode.smp.enchantbookplus.ConfigEnchantmentEntry;
 import pro.cloudnode.smp.enchantbookplus.EnchantBookPlus;
 import pro.cloudnode.smp.enchantbookplus.Permissions;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 public final class PrepareAnvil implements Listener {
@@ -24,8 +24,10 @@ public final class PrepareAnvil implements Listener {
         final @NotNull Optional<@NotNull ItemStack> result = Optional.ofNullable(event.getResult());
         if (result.isEmpty()) return;
         final @NotNull AnvilInventory inventory = event.getInventory();
-        final @NotNull ItemStack item = Objects.requireNonNull(inventory.getItem(0));
-        final @NotNull ItemStack upgrade = Objects.requireNonNull(inventory.getItem(1));
+        final @Nullable ItemStack item = inventory.getItem(0);
+        if (item == null) return;
+        final @Nullable ItemStack upgrade = inventory.getItem(1);
+        if (upgrade == null) return;
         final @NotNull Map<@NotNull Enchantment, @NotNull Integer> itemEnchants =
                 item.getType() == Material.ENCHANTED_BOOK && item.getItemMeta() instanceof final @NotNull EnchantmentStorageMeta itemMeta ?
                         itemMeta.getStoredEnchants() : item.getEnchantments();

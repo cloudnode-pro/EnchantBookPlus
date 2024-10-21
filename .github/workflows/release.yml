@@ -46,3 +46,4 @@ jobs:
           file: target/EnchantBookPlus-${{ steps.version.outputs.VERSION }}.jar
           changelog: ${{ github.event.release.body }}
           loaders: paper
+          dependencies: '[{"project_id":"N4CZEMrg","dependency_type":"optional"}]'

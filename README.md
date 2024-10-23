@@ -16,7 +16,7 @@ You can configure which enchantments can be combined above the Vanilla Minecraft
 You can set the max level for each enchantment, and add XP cost in levels.
 
 > [!IMPORTANT]
-> You need [AnvilUnlocker](https://github.com/Jikoo/AnvilUnlocker/releases/latest) for anvil costs above 40 lvl to
+> You need [AnvilUnlocker](https://modrinth.com/plugin/anvilunlocker) for anvil costs above 40 lvl to
 > disable the "Too Expensive!" message.
 
 ## Permissions

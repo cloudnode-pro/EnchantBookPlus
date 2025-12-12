@@ -83,6 +83,7 @@ public final class EnchantBookPlus extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        Permissions.init();
         Objects.requireNonNull(getCommand("enchantbookplus")).setExecutor(new MainCommand());
 
         registerEvents();

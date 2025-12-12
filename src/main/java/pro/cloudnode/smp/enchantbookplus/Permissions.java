@@ -1,7 +1,6 @@
 package pro.cloudnode.smp.enchantbookplus;
 
 import org.bukkit.Registry;
-import org.bukkit.Server;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
@@ -16,8 +15,7 @@ public final class Permissions {
     public static @NotNull String RELOAD = "enchantbookplus.reload";
 
     public static void init() {
-        final @NotNull Server server = EnchantBookPlus.getInstance().getServer();
-        final @NotNull PluginManager pm = server.getPluginManager();
+        final @NotNull PluginManager pm = EnchantBookPlus.getInstance().getServer().getPluginManager();
         pm.addPermission(new Permission(
                 RELOAD,
                 "Reload plugin config using `/enchantbookplus reload`",

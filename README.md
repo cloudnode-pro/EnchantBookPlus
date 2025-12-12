@@ -26,10 +26,10 @@ You can set the max level for each enchantment, and add XP cost in levels.
 >
 > Example: `enchantbookplus.enchant.*` or `enchantbookplus.enchant.unbreaking`
 
-| Permission                              | Description                                                                            |
-|-----------------------------------------|----------------------------------------------------------------------------------------|
-| `enchantbookplus.enchant.<enchantment>` | Allow enchanting `<enchantment>` above the vanilla level, as configured in the plugin. |
-| `enchantbookplus.reload`                | Reload plugin config using `/enchantbookplus reload`                                   |
+| Permission                              | Description                                                                            | Default  |
+|-----------------------------------------|----------------------------------------------------------------------------------------|----------|
+| `enchantbookplus.enchant.<enchantment>` | Allow enchanting `<enchantment>` above the vanilla level, as configured in the plugin. | Everyone |
+| `enchantbookplus.reload`                | Reload plugin config using `/enchantbookplus reload`                                   | OP       |
 
 ## Reporting issues
 Fixing bugs is the utmost priority for this project.

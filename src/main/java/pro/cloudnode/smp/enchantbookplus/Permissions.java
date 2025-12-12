@@ -21,13 +21,11 @@ public final class Permissions {
                 "Reload plugin config using `/enchantbookplus reload`",
                 PermissionDefault.OP
         ));
-        for (Enchantment enchantment : Registry.ENCHANTMENT) {
-            EnchantBookPlus.getInstance().getLogger().info("Registering permission for " + enchantment.getKey());
+        for (Enchantment enchantment : Registry.ENCHANTMENT)
             pm.addPermission(new Permission(
                     enchant(enchantment),
                     "Allow enchanting " + enchantment.getKey() + "above the vanilla level, as configured in the plugin",
                     PermissionDefault.TRUE
             ));
-        }
     }
 }

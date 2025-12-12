@@ -15,7 +15,8 @@ import java.util.Optional;
 public final class MainCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
-        if (args.length == 1 && args[0].equalsIgnoreCase("reload")) reload(sender, command);
+        if (args.length == 1 && args[0].equalsIgnoreCase("reload"))
+            return reload(sender, command);
         return overview(sender);
     }
 

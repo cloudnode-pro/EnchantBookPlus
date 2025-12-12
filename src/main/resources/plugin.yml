@@ -6,7 +6,16 @@ description: "Combine enchantment books to achieve levels above vanilla"
 api-version: '1.20'
 softdepend:
   - AnvilUnlocker
+
 commands:
   enchantbookplus:
     description: "EnchantBookPlus main command"
     usage: "/<command>"
+
+permissions:
+  enchantbookplus.enchant.*:
+    description: Allow enchanting all enchantments above the vanilla level, as configured in the plugin
+    default: true
+  enchantbookplus.reload:
+    description: Reload plugin config using `/enchantbookplus reload`
+    default: op

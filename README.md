@@ -1,10 +1,10 @@
 # EnchantBookPlus
 
-[![CodeQL](https://github.com/cloudnode-pro/EnchantBookPlus/actions/workflows/codeql.yml/badge.svg)](https://github.com/cloudnode-pro/EnchantBookPlus/actions/workflows/codeql.yml)
 [![Modrinth](https://img.shields.io/badge/Modrinth-%2326292f?logo=modrinth)](https://modrinth.com/plugin/dMOPYb3s/)
 [![Version](https://img.shields.io/modrinth/v/dMOPYb3s)](https://modrinth.com/plugin/dMOPYb3s/)
 [![Game Versions](https://img.shields.io/modrinth/game-versions/dMOPYb3s)](https://modrinth.com/plugin/dMOPYb3s/)
 [![Downloads](https://img.shields.io/modrinth/dt/dMOPYb3s)](https://modrinth.com/plugin/dMOPYb3s/)
+[![CodeQL](https://github.com/cloudnode-pro/EnchantBookPlus/actions/workflows/codeql.yaml/badge.svg)](https://github.com/cloudnode-pro/EnchantBookPlus/actions/workflows/codeql.yaml)
 
 Combine enchantment books to achieve levels above vanilla
 

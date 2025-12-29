@@ -48,7 +48,7 @@ public final class MainCommand implements CommandExecutor, TabCompleter {
     @SuppressWarnings("SameReturnValue")
     public boolean overview(final @NotNull CommandSender sender) {
         PluginDescriptionFile description = plugin.getDescription();
-        sender.sendMessage("§а" + description.getName() + " §fv" + description.getVersion() + " by §7"
+        sender.sendMessage("§a" + description.getName() + " §fv" + description.getVersion() + " by §7"
                 + String.join(", ", description.getAuthors()));
 
         return true;

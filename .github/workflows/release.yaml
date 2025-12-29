@@ -48,7 +48,10 @@ jobs:
           name: ${{ github.event.release.name == github.event.release.tag_name && format('EnchantBookPlus {0}', steps.version.outputs.VERSION) || github.event.release.name }}
           version: ${{ steps.version.outputs.VERSION }}
           changelog: ${{ github.event.release.body }}
-          loaders: paper
+          loaders: |-
+            paper
+            spigot
+            bukkit
           game-versions: |-
             1.17.x
             1.18.x

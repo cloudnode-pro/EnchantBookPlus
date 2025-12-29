@@ -15,17 +15,10 @@ import java.util.stream.Collectors;
 
 public final class EnchantBookPlus extends JavaPlugin {
     /**
-     * Get plugin instance.
-     */
-    public static EnchantBookPlus getInstance() {
-        return getPlugin(EnchantBookPlus.class);
-    }
-
-    /**
      * Register event listeners.
      */
     private void registerEvents() {
-        getServer().getPluginManager().registerEvents(new PrepareAnvil(), this);
+        getServer().getPluginManager().registerEvents(new PrepareAnvil(this), this);
     }
 
     /**
@@ -36,7 +29,7 @@ public final class EnchantBookPlus extends JavaPlugin {
     /**
      * Config enchantments cache
      */
-    public @NotNull List<@NotNull ConfigEnchantmentEntry> getConfigEnchantments() {
+    @NotNull List<@NotNull ConfigEnchantmentEntry> getConfigEnchantments() {
         return configEnchantments;
     }
 
@@ -48,7 +41,7 @@ public final class EnchantBookPlus extends JavaPlugin {
     /**
      * "ALL" enchantment cache
      */
-    public @NotNull Optional<ConfigEnchantmentEntry.@NotNull AllConfigEnchantmentEntry> getAllConfigEnchantment() {
+    public @NotNull Optional<ConfigEnchantmentEntry.AllConfigEnchantmentEntry> getAllConfigEnchantment() {
         return Optional.ofNullable(allConfigEnchantment);
     }
 
@@ -58,33 +51,47 @@ public final class EnchantBookPlus extends JavaPlugin {
      * @param enchantment The Minecraft enchantment
      */
     public @NotNull Optional<@NotNull ConfigEnchantmentEntry> getConfigEnchantment(final @NotNull Enchantment enchantment) {
-        final @NotNull Optional<@NotNull ConfigEnchantmentEntry> entry = getConfigEnchantments().stream().filter(c -> c.isEnchantment(enchantment)).findFirst();
-        return entry.isEmpty() ? getAllConfigEnchantment().map(a -> a.enchant(enchantment)) : entry;
+        final Optional<ConfigEnchantmentEntry> entry = getConfigEnchantments().stream()
+                .filter(c -> c.isEnchantment(enchantment))
+                .findFirst();
+
+        return entry.isEmpty()
+                ? getAllConfigEnchantment().map(a -> a.enchant(enchantment))
+                : entry;
     }
 
     /**
      * Reload config
      */
-    public void reload() {
+    void reload() {
         reloadConfig();
-        final @NotNull List<@NotNull ConfigEnchantmentEntry> enchants;
+
+        final List<ConfigEnchantmentEntry> enchants;
+
         try {
             enchants = ConfigEnchantmentEntry.config(getConfig().get("enchantments"));
         }
-        catch (final @NotNull Exception exception) {
+        catch (final IllegalArgumentException | IndexOutOfBoundsException | ClassCastException exception) {
             getLogger().log(Level.SEVERE, "Failed to load config", exception);
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
+
         allConfigEnchantment = enchants.stream()
-                .filter(c -> c.name.equalsIgnoreCase("ALL")).findFirst().map(ConfigEnchantmentEntry.AllConfigEnchantmentEntry::from).orElse(null);
-        configEnchantments = enchants.stream().filter(c -> !c.name.equalsIgnoreCase("ALL")).collect(Collectors.toList());
+                .filter(c -> c.name.equalsIgnoreCase("ALL"))
+                .findFirst()
+                .map(ConfigEnchantmentEntry.AllConfigEnchantmentEntry::from)
+                .orElse(null);
+
+        configEnchantments = enchants.stream()
+                .filter(c -> !c.name.equalsIgnoreCase("ALL"))
+                .collect(Collectors.toList());
     }
 
     @Override
     public void onEnable() {
-        Permissions.init();
-        Objects.requireNonNull(getCommand("enchantbookplus")).setExecutor(new MainCommand());
+        Permissions.init(this);
+        Objects.requireNonNull(getCommand("enchantbookplus")).setExecutor(new MainCommand(this));
 
         registerEvents();
         saveDefaultConfig();
@@ -93,6 +100,7 @@ public final class EnchantBookPlus extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        allConfigEnchantment = null;
+        configEnchantments.clear();
     }
 }

@@ -16,7 +16,7 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
-          java-version: 17
+          java-version: 16
           distribution: temurin
           cache: maven
 
@@ -48,8 +48,14 @@ jobs:
           name: ${{ github.event.release.name == github.event.release.tag_name && format('EnchantBookPlus {0}', steps.version.outputs.VERSION) || github.event.release.name }}
           version: ${{ steps.version.outputs.VERSION }}
           changelog: ${{ github.event.release.body }}
-          loaders: paper
+          loaders: |-
+            paper
+            spigot
+            bukkit
           game-versions: |-
+            1.17.x
+            1.18.x
+            1.19.x
             1.20.x
             1.21.x
           files: target/EnchantBookPlus-${{ steps.version.outputs.VERSION }}.jar

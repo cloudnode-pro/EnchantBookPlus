@@ -12,19 +12,23 @@ public final class Permissions {
         return "enchantbookplus.enchant." + enchantment.getKey().getKey();
     }
 
-    public static @NotNull String RELOAD = "enchantbookplus.reload";
+    public final static @NotNull String RELOAD = "enchantbookplus.reload";
 
-    public static void init() {
-        final @NotNull PluginManager pm = EnchantBookPlus.getInstance().getServer().getPluginManager();
+    public static void init(final @NotNull EnchantBookPlus plugin) {
+        final PluginManager pm = plugin.getServer().getPluginManager();
+
         pm.addPermission(new Permission(
                 RELOAD,
-                "Reload plugin config using `/enchantbookplus reload`",
+                "Reload plugin config using ‘/enchantbookplus reload’",
                 PermissionDefault.OP
         ));
+
         for (Enchantment enchantment : Registry.ENCHANTMENT)
             pm.addPermission(new Permission(
                     enchant(enchantment),
-                    "Allow enchanting " + enchantment.getKey() + "above the vanilla level, as configured in the plugin",
+                    "Allow enchanting "
+                            + enchantment.getKey()
+                            + "above the vanilla level, as configured in the plugin",
                     PermissionDefault.TRUE
             ));
     }

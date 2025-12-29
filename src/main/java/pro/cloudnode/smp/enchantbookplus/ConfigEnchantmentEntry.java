@@ -1,13 +1,14 @@
 package pro.cloudnode.smp.enchantbookplus;
 
 import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.enchantments.Enchantment;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -39,18 +40,15 @@ public class ConfigEnchantmentEntry {
     protected final boolean multiplyCostByLevel;
 
     /**
-     * Name of the enchantment.
-     */
-    public final @NotNull String getName() {
-        return name;
-    }
-
-    /**
      * Maximum level of the enchantment.
      */
-    public final @NotNull Optional<@NotNull Integer> getMaxLevel() {
-        if (Optional.ofNullable(maxLevel).isEmpty()) return Optional.empty();
-        if (maxLevelRelative) return Optional.of(getEnchantment().getMaxLevel() + maxLevel);
+    public final @NotNull Optional<Integer> getMaxLevel() {
+        if (Optional.ofNullable(maxLevel).isEmpty())
+            return Optional.empty();
+
+        if (maxLevelRelative)
+            return Optional.of(getEnchantment().getMaxLevel() + maxLevel);
+
         return Optional.of(maxLevel);
     }
 
@@ -72,7 +70,7 @@ public class ConfigEnchantmentEntry {
      * Get enchantment
      */
     public final Enchantment getEnchantment() {
-        return Enchantment.getByKey(NamespacedKey.minecraft(name));
+        return Registry.ENCHANTMENT.get(NamespacedKey.minecraft(name));
     }
 
     /**
@@ -91,7 +89,13 @@ public class ConfigEnchantmentEntry {
      * @param cost                Cost of the enchantment.
      * @param multiplyCostByLevel Multiply cost by level.
      */
-    public ConfigEnchantmentEntry(final @NotNull String name, final @Nullable Integer maxLevel, final boolean maxLevelRelative, final int cost, final boolean multiplyCostByLevel) {
+    public ConfigEnchantmentEntry(
+            final @NotNull String name,
+            final @Nullable Integer maxLevel,
+            final boolean maxLevelRelative,
+            final int cost,
+            final boolean multiplyCostByLevel
+    ) {
         this.name = name;
         this.maxLevel = maxLevel;
         this.maxLevelRelative = maxLevelRelative;
@@ -104,12 +108,27 @@ public class ConfigEnchantmentEntry {
      *
      * @param configValue Config object
      */
-    public static @NotNull ConfigEnchantmentEntry configValue(final @NotNull HashMap<@NotNull String, @NotNull Object> configValue) {
-        final @NotNull String name = (String) Objects.requireNonNull(configValue.get("name"));
+    public static @NotNull ConfigEnchantmentEntry configValue(
+            final @NotNull Map<@NotNull String, @NotNull Object> configValue
+    ) throws NumberFormatException, IndexOutOfBoundsException, ClassCastException {
+        final String name = (String) Objects.requireNonNull(configValue.get("name"));
+
         final @Nullable Integer maxLevel;
+
         final boolean maxLevelRelative;
-        if (configValue.containsKey("max-level")) {
-            if (configValue.get("max-level") instanceof final @NotNull String string) {
+
+        if (!configValue.containsKey("max-level")) {
+            maxLevel = null;
+            maxLevelRelative = false;
+        }
+
+        else {
+            if (!(configValue.get("max-level") instanceof final String string)) {
+                maxLevel = (Integer) configValue.get("max-level");
+                maxLevelRelative = false;
+            }
+
+            else {
                 if (string.startsWith("+")) {
                     maxLevel = Integer.parseInt(string.substring(1));
                     maxLevelRelative = true;
@@ -119,38 +138,36 @@ public class ConfigEnchantmentEntry {
                     maxLevelRelative = false;
                 }
             }
-            else {
-                maxLevel = (Integer) configValue.get("max-level");
-                maxLevelRelative = false;
-            }
         }
-        else {
-            maxLevel = null;
-            maxLevelRelative = false;
-        }
-        final boolean multiplyCostByLevel;
-        final int cost;
-        if (configValue.containsKey("cost")) {
-            if (configValue.get("cost") instanceof final @NotNull String costString) {
-                if (costString.startsWith("*")) {
-                    multiplyCostByLevel = true;
-                    cost = Integer.parseInt(costString.substring(1));
-                }
-                else {
-                    multiplyCostByLevel = false;
-                    cost = Integer.parseInt(costString);
-                }
-            }
-            else {
-                multiplyCostByLevel = false;
-                cost = (Integer) configValue.get("cost");
-            }
-        }
-        else {
-            multiplyCostByLevel = false;
-            cost = 0;
-        }
-        return new ConfigEnchantmentEntry(name, maxLevel, maxLevelRelative, cost, multiplyCostByLevel);
+
+        if (!configValue.containsKey("cost"))
+            return new ConfigEnchantmentEntry(name, maxLevel, maxLevelRelative, 0, false);
+
+        if (!(configValue.get("cost") instanceof final @NotNull String costString))
+            return new ConfigEnchantmentEntry(
+                    name,
+                    maxLevel,
+                    maxLevelRelative,
+                    (Integer) configValue.get("cost"),
+                    false
+            );
+
+        if (costString.startsWith("*"))
+            return new ConfigEnchantmentEntry(
+                    name,
+                    maxLevel,
+                    maxLevelRelative,
+                    Integer.parseInt(costString.substring(1)),
+                    true
+            );
+
+        return new ConfigEnchantmentEntry(
+                name,
+                maxLevel,
+                maxLevelRelative,
+                Integer.parseInt(costString),
+                false
+        );
     }
 
 
@@ -159,7 +176,9 @@ public class ConfigEnchantmentEntry {
      *
      * @param configValue Config object array
      */
-    public static @NotNull List<@NotNull ConfigEnchantmentEntry> configArray(final @NotNull ArrayList<@NotNull HashMap<@NotNull String, @NotNull Object>> configValue) {
+    public static @NotNull List<@NotNull ConfigEnchantmentEntry> configArray(
+            final @NotNull ArrayList<@NotNull Map<@NotNull String, @NotNull Object>> configValue
+    ) throws NumberFormatException, IndexOutOfBoundsException, ClassCastException {
         return configValue.stream().map(ConfigEnchantmentEntry::configValue).collect(Collectors.toList());
     }
 
@@ -169,17 +188,33 @@ public class ConfigEnchantmentEntry {
      * @param configValue Config object
      */
     private static boolean isValidConfigValue(final @Nullable Object configValue) {
-        if (configValue == null) return false;
-        if (!(configValue instanceof final @NotNull ArrayList<?> arrayList)) return false;
-        for (final @NotNull Object object : arrayList) {
-            if (!(object instanceof final @NotNull HashMap<?, ?> hashMap)) return false;
-            if (!hashMap.containsKey("name")) return false;
-            if (!(hashMap.get("name") instanceof String)) return false;
-            if (hashMap.containsKey("max-level") && !(hashMap.get("max-level") instanceof String) && !(hashMap.get("max-level") instanceof Integer))
+        if (configValue == null)
+            return false;
+
+        if (!(configValue instanceof final ArrayList<?> arrayList))
+            return false;
+
+        for (final Object object : arrayList) {
+            if (!(object instanceof final Map<?, ?> hashMap))
                 return false;
-            if (hashMap.containsKey("cost") && !(hashMap.get("cost") instanceof String) && !(hashMap.get("cost") instanceof Integer))
+
+            if (!hashMap.containsKey("name"))
+                return false;
+
+            if (!(hashMap.get("name") instanceof String))
+                return false;
+
+            if (hashMap.containsKey("max-level") &&
+                    !(hashMap.get("max-level") instanceof String) &&
+                    !(hashMap.get("max-level") instanceof Integer))
+                return false;
+
+            if (hashMap.containsKey("cost") &&
+                    !(hashMap.get("cost") instanceof String) &&
+                    !(hashMap.get("cost") instanceof Integer))
                 return false;
         }
+
         return true;
     }
 
@@ -188,22 +223,45 @@ public class ConfigEnchantmentEntry {
      *
      * @param configValue Config object
      */
-    public static @NotNull List<@NotNull ConfigEnchantmentEntry> config(final @Nullable Object configValue) throws IllegalArgumentException {
-        if (!isValidConfigValue(configValue)) throw new IllegalArgumentException("Invalid config value");
-        return configArray((ArrayList<HashMap<String, Object>>) configValue);
+    public static @NotNull List<@NotNull ConfigEnchantmentEntry> config(
+            final @Nullable Object configValue
+    ) throws IllegalArgumentException, IndexOutOfBoundsException, ClassCastException {
+        if (!isValidConfigValue(configValue))
+            throw new IllegalArgumentException("Invalid config value");
+
+        //noinspection unchecked
+        return configArray((ArrayList<Map<String, Object>>) configValue);
     }
 
     public static final class AllConfigEnchantmentEntry extends ConfigEnchantmentEntry {
-        private AllConfigEnchantmentEntry(final @Nullable Integer maxLevel, final boolean maxLevelRelative, final int cost, final boolean multiplyCostByLevel) {
+        private AllConfigEnchantmentEntry(
+                final @Nullable Integer maxLevel,
+                final boolean maxLevelRelative,
+                final int cost,
+                final boolean multiplyCostByLevel
+        ) {
             super("ALL", maxLevel, maxLevelRelative, cost, multiplyCostByLevel);
         }
 
-        public static @NotNull AllConfigEnchantmentEntry from(final @NotNull ConfigEnchantmentEntry configEnchantmentEntry) {
-            return new AllConfigEnchantmentEntry(configEnchantmentEntry.maxLevel, configEnchantmentEntry.maxLevelRelative, configEnchantmentEntry.cost, configEnchantmentEntry.multiplyCostByLevel);
+        public static @NotNull AllConfigEnchantmentEntry from(
+                final @NotNull ConfigEnchantmentEntry configEnchantmentEntry
+        ) {
+            return new AllConfigEnchantmentEntry(
+                    configEnchantmentEntry.maxLevel,
+                    configEnchantmentEntry.maxLevelRelative,
+                    configEnchantmentEntry.cost,
+                    configEnchantmentEntry.multiplyCostByLevel
+            );
         }
 
         public @NotNull ConfigEnchantmentEntry enchant(final @NotNull Enchantment enchantment) {
-            return new ConfigEnchantmentEntry(enchantment.getKey().getKey(), this.maxLevel, maxLevelRelative, cost, multiplyCostByLevel);
+            return new ConfigEnchantmentEntry(
+                    enchantment.getKey().getKey(),
+                    this.maxLevel,
+                    maxLevelRelative,
+                    cost,
+                    multiplyCostByLevel
+            );
         }
     }
 }

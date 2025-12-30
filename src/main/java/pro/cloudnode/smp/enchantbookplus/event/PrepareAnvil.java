@@ -90,8 +90,11 @@ public final class PrepareAnvil implements Listener {
                 continue;
 
             if (configEnchantment.get().getMaxLevel().isPresent() &&
-                            finalLevel > configEnchantment.get().getMaxLevel().get())
+                            finalLevel > configEnchantment.get().getMaxLevel().get()) {
+                // guard against vanilla downgrade
+                upgrades.put(enchantment, configEnchantment.get().getMaxLevel().get());
                 continue;
+            }
 
             if (finalLevel > upgradeLevel)
                 cost += configEnchantment.get().getMultiplyCostByLevel()

@@ -1,5 +1,6 @@
 package pro.cloudnode.smp.enchantbookplus;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.permissions.Permission;
@@ -14,9 +15,12 @@ public final class Permissions {
     public static final String RELOAD = "enchantbookplus.reload";
 
     public static String enchant(final Enchantment enchantment) {
-        return "enchantbookplus.enchant." + enchantment.getKey().getKey();
-    }
+        if (enchantment.getKey().getNamespace().equals(NamespacedKey.MINECRAFT)) {
+            return "enchantbookplus.enchant." + enchantment.getKey().getKey();
+        }
 
+        return "enchantbookplus.enchant." + enchantment.getKey().getNamespace() + "." + enchantment.getKey().getKey();
+    }
 
     public static void register(final EnchantBookPlus plugin) {
         final PluginManager pm = plugin.getServer().getPluginManager();

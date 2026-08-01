@@ -1,3 +1,8 @@
+# Enable or disable processing of custom enchantments from other plugins (e.g., ExcellentEnchants)
+# If disabled, only vanilla Minecraft enchantments will be affected by the "ALL" rule
+# Set to true to allow custom enchantments, false to only use vanilla enchantments
+allow-custom-enchantments: false
+
 # List of enchantments for which to enable upgrading above the vanilla max levels using an anvil.
 enchantments:
     # Enchantment name (same as in the /enchant command).

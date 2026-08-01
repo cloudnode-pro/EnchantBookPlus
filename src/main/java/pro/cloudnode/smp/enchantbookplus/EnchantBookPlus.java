@@ -55,7 +55,19 @@ public final class EnchantBookPlus extends JavaPlugin {
                 .filter(c -> c.isEnchantment(enchantment))
                 .findFirst();
 
-        return entry.isEmpty() ? getAllConfigEnchantment().map(a -> a.enchant(enchantment)) : entry;
+        if (entry.isPresent()) {
+            return entry;
+        }
+
+        // If "ALL" entry exists, create a specific entry for this enchantment
+        final Optional<ConfigEnchantmentEntry.AllConfigEnchantmentEntry> allEntry = getAllConfigEnchantment();
+        if (allEntry.isPresent()) {
+            final ConfigEnchantmentEntry specificEntry = allEntry.get().enchant(enchantment);
+            // If the enchantment was skipped (null), return empty
+            return Optional.ofNullable(specificEntry);
+        }
+
+        return Optional.empty();
     }
 
     /**
@@ -63,6 +75,10 @@ public final class EnchantBookPlus extends JavaPlugin {
      */
     void reload() {
         reloadConfig();
+
+        // Load the allow-custom-enchantments setting from config
+        final boolean allowCustom = getConfig().getBoolean("allow-custom-enchantments", true);
+        ConfigEnchantmentEntry.setAllowCustomEnchantments(allowCustom);
 
         final List<ConfigEnchantmentEntry> enchants;
 

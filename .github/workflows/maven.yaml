@@ -35,4 +35,5 @@ jobs:
 
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
       - name: Submit Dependency Snapshot
+        if: github.event.pull_request.head.repo.full_name == github.repository
         uses: advanced-security/maven-dependency-submission-action@v5

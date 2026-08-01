@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.OptionalInt;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 @NullMarked
@@ -39,6 +40,21 @@ public class ConfigEnchantmentEntry {
      * Multiply cost by level.
      */
     protected final boolean multiplyCostByLevel;
+
+    /**
+     * Whether to allow custom enchantments from other plugins.
+     * Set this from the main plugin class.
+     */
+    private static boolean allowCustomEnchantments = true;
+
+    /**
+     * Set whether custom enchantments are allowed.
+     *
+     * @param allow true to allow custom enchantments, false to only use vanilla enchantments
+     */
+    public static void setAllowCustomEnchantments(final boolean allow) {
+        allowCustomEnchantments = allow;
+    }
 
     /**
      * @param name Name of the enchantment.
@@ -194,8 +210,13 @@ public class ConfigEnchantmentEntry {
             return OptionalInt.empty();
         }
 
+        final Enchantment enchantment = getEnchantment();
+        if (enchantment == null) {
+            return OptionalInt.empty();
+        }
+
         if (maxLevelRelative) {
-            return OptionalInt.of(getEnchantment().getMaxLevel() + maxLevel);
+            return OptionalInt.of(enchantment.getMaxLevel() + maxLevel);
         }
 
         return OptionalInt.of(maxLevel);
@@ -218,8 +239,12 @@ public class ConfigEnchantmentEntry {
     /**
      * Get enchantment
      */
-    public final Enchantment getEnchantment() {
-        return Objects.requireNonNull(Registry.ENCHANTMENT.get(NamespacedKey.minecraft(name)));
+    public final @Nullable Enchantment getEnchantment() {
+        final Enchantment enchantment = Registry.ENCHANTMENT.get(NamespacedKey.minecraft(name));
+        if (enchantment == null) {
+            java.util.logging.Logger.getLogger("EnchantBookPlus").warning("Enchantment '" + name + "' not found in registry");
+        }
+        return enchantment;
     }
 
     /**
@@ -250,7 +275,18 @@ public class ConfigEnchantmentEntry {
             );
         }
 
-        public ConfigEnchantmentEntry enchant(final Enchantment enchantment) {
+        /**
+         * Create a ConfigEnchantmentEntry for a specific enchantment.
+         * Returns null if the enchantment is custom and custom enchantments are disabled.
+         *
+         * @param enchantment The enchantment to create an entry for
+         * @return A new ConfigEnchantmentEntry, or null if skipped
+         */
+        public @Nullable ConfigEnchantmentEntry enchant(final Enchantment enchantment) {
+            // Skip custom enchantments if they are not allowed
+            if (!allowCustomEnchantments && !enchantment.getKey().getNamespace().equals(NamespacedKey.MINECRAFT)) {
+                return null;
+            }
             return new ConfigEnchantmentEntry(
                     enchantment.getKey().getKey(),
                     this.maxLevel,

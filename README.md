@@ -26,12 +26,17 @@ See the [default config](https://github.com/cloudnode-pro/EnchantBookPlus/blob/m
 > [!NOTE]
 > `<echantment>` is the enchantment ID, e.g. `swift_sneak`, `efficiency`, etc. Replace with `*` for all enchantments.
 >
-> Example: `enchantbookplus.enchant.*` or `enchantbookplus.enchant.unbreaking`
+> For custom enchantments, the `<namespace>` prefix is required and must specify the namespace of the plugin or datapack
+> which registered the enchantment.
+>
+> Example: `enchantbookplus.enchant.*`, `enchantbookplus.enchant.unbreaking`, or
+> `enchantbookplus.enchant.someplugin.enchantname`.
 
-| Permission                              | Description                                                                            | Default  |
-|-----------------------------------------|----------------------------------------------------------------------------------------|----------|
-| `enchantbookplus.enchant.<enchantment>` | Allow enchanting `<enchantment>` above the vanilla level, as configured in the plugin. | Everyone |
-| `enchantbookplus.reload`                | Reload plugin config using `/enchantbookplus reload`                                   | OP       |
+| Permission                                          | Description                                                                                                                                           | Default  |
+|-----------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
+| `enchantbookplus.enchant.<enchantment>`             | Allow enchanting `<enchantment>` above the vanilla level, as configured in the plugin.                                                                | Everyone |
+| `enchantbookplus.enchant.<namespace>.<enchantment>` | Allow enchanting the custom enchantment `<enchantment>` from the `<namespace>` plugin/datapack above its maximum level, as configured in this plugin. | Everyone |
+| `enchantbookplus.reload`                            | Reload plugin config using `/enchantbookplus reload`                                                                                                  | OP       |
 
 ## Reporting issues
 Fixing bugs is the utmost priority for this project.

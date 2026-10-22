@@ -219,7 +219,7 @@ public class ConfigEnchantmentEntry {
      * Get enchantment
      */
     public final Enchantment getEnchantment() {
-        return Objects.requireNonNull(Registry.ENCHANTMENT.get(NamespacedKey.minecraft(name)));
+        return Objects.requireNonNull(Registry.ENCHANTMENT.get(Objects.requireNonNull(NamespacedKey.fromString(name))));
     }
 
     /**
@@ -228,7 +228,12 @@ public class ConfigEnchantmentEntry {
      * @param enchantment The enchantment
      */
     public final boolean isEnchantment(final Enchantment enchantment) {
-        return name.equalsIgnoreCase(enchantment.getKey().getKey());
+        if (!enchantment.getKey().getNamespace().equals(NamespacedKey.MINECRAFT)) {
+            return name.equalsIgnoreCase(enchantment.getKey().getNamespace() + ":" + enchantment.getKey().getKey());
+        }
+
+        return name.equalsIgnoreCase(enchantment.getKey().getKey())
+                || name.equalsIgnoreCase(enchantment.getKey().getNamespace() + ":" + enchantment.getKey().getKey());
     }
 
     public static final class AllConfigEnchantmentEntry extends ConfigEnchantmentEntry {
@@ -252,7 +257,7 @@ public class ConfigEnchantmentEntry {
 
         public ConfigEnchantmentEntry enchant(final Enchantment enchantment) {
             return new ConfigEnchantmentEntry(
-                    enchantment.getKey().getKey(),
+                    enchantment.getKey().getNamespace() + ":" + enchantment.getKey().getKey(),
                     this.maxLevel,
                     maxLevelRelative,
                     cost,

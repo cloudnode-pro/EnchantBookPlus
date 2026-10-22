@@ -1,8 +1,8 @@
 # List of enchantments for which to enable upgrading above the vanilla max levels using an anvil.
 enchantments:
     # Enchantment name (same as in the /enchant command).
-    # Set this to "ALL" to enable upgrading for all other enchantments not listed here.
-    # NOTE: Enchantments that on Vanilla have a max level of 1 (e.g. Silk Touch, Mending, Curse of Vanishing, Infinity) etc. are always ignored by this plugin.
+    # Vanilla enchantments can be written with or without the namespace, e.g. "efficiency" or "minecraft:efficiency".
+    # Custom enchantments must include their plugin or datapack namespace, in the form "namespace:key".
     -   name: efficiency
         # Maximum level to which the enchantment can be upgraded.
         # For relative levels above the vanilla max level, use e.g. "+1". E.g. +1 for Protection will allow upgrading to Protection V. For Efficiency, +1 will allow upgrading to Efficiency VI.
@@ -16,6 +16,7 @@ enchantments:
         # You can also just provide a flat value for all levels, e.g. "10" will cost 10 XP levels regardless of the enchantment level
         cost: "*150"
 
+        # "ALL" affects all other enchantments not listed above.
     -   name: ALL
         max-level: "+1"
         cost: 100

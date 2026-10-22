@@ -16,6 +16,7 @@ enchantments:
         # You can also just provide a flat value for all levels, e.g. "10" will cost 10 XP levels regardless of the enchantment level
         cost: "*150"
 
+        # "ALL" affects all other enchantments not listed above.
     -   name: ALL
         max-level: "+1"
         cost: 100
